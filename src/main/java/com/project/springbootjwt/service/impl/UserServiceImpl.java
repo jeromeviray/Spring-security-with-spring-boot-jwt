@@ -37,4 +37,27 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         logger.info("Successfully saved");
     }
+
+    @Override
+    public void changePassword(int id, String password) {
+        User user = findById(id);
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    @Override
+    public boolean comparePassword(int id, String currentPassword) {
+        logger.info("{}", userRepository.findById(id));
+        return passwordEncoder.matches(currentPassword, userRepository.findById(id).getPassword());
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User findById(int id) {
+        return userRepository.findById(id);
+    }
 }
