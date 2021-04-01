@@ -1,5 +1,7 @@
 package com.project.springbootjwt.service;
 
+import com.project.springbootjwt.jwtUtils.JwtResponse;
+import com.project.springbootjwt.jwtUtils.JwtTokenProvider;
 import com.project.springbootjwt.model.User;
 
 public interface UserService {
@@ -8,4 +10,5 @@ public interface UserService {
     boolean comparePassword(int id, String currentPassword);
     User findByUsername(String username);
     User findById(int id);
+    JwtResponse login(String username, String password);
 }

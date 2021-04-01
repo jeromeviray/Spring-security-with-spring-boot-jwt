@@ -1,13 +1,18 @@
 package com.project.springbootjwt.controller;
 
 import com.project.springbootjwt.exception.PasswordException;
+import com.project.springbootjwt.jwtUtils.JwtResponse;
 import com.project.springbootjwt.model.ChangePassword;
 import com.project.springbootjwt.model.User;
 import com.project.springbootjwt.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.EntityResponse;
+
+import javax.swing.text.html.parser.Entity;
 
 @RestController
 @RequestMapping(value = "api/v1/users")
@@ -22,6 +27,10 @@ public class UserController {
         userService.save(user);
     }
 
+    @RequestMapping(value = "/auth/login", method = RequestMethod.POST)
+    public ResponseEntity<?> login(@RequestBody User user){
+        return ResponseEntity.ok(userService.login(user.getUsername(), user.getPassword()));
+    }
     @RequestMapping(value = "/account/change/password", method = RequestMethod.POST)
     public void changePassword(@RequestBody ChangePassword changePassword){
         logger.info("{}", userService.comparePassword( changePassword.getId(), changePassword.getCurrentPassword() ));
