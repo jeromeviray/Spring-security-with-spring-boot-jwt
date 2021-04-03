@@ -5,15 +5,18 @@ import com.project.springbootjwt.jwtUtils.JwtResponse;
 import com.project.springbootjwt.jwtUtils.JwtTokenProvider;
 import com.project.springbootjwt.model.Role;
 import com.project.springbootjwt.model.User;
+import com.project.springbootjwt.model.UserInformation;
 import com.project.springbootjwt.repository.RoleRepository;
 import com.project.springbootjwt.repository.UserRepository;
 import com.project.springbootjwt.service.UserService;
+import com.project.springbootjwt.user.AuthenticationFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,9 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -35,7 +41,8 @@ public class UserServiceImpl implements UserService {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-    Logger logger = LoggerFactory.getLogger(UserService.class);
+    @Autowired
+    private AuthenticationFacade authenticationFacade;
 
 
     @Override
@@ -88,5 +95,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(int id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public UserInformation findUser() {
+        Authentication authentication = authenticationFacade.getAuthenticated();
+        User user = userRepository.findByUsername(authentication.getName());
+        return userRepository.findByIdAndUsername(user.getId(), user.getUsername());
+    }
+
+    @Override
+    public List<UserInformation> findAllUser() {
+        return userRepository.findAllUserInformation();
     }
 }

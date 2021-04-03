@@ -39,13 +39,10 @@ public class JwtTokenProvider {
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
-        logger.info("claims: ", claims);
-
         return claimsResolver.apply(claims);
     }
     //for retrieving any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) {
-        logger.info("{}", SECRET_KEY);
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
@@ -73,7 +70,7 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + VALIDITY);
-        logger.info("{}", now +"\n"+validity);
+        logger.info("time now: ", now +"\nDuration of jwt token: "+validity);
 
         return Jwts.builder()
                 .setClaims(claims)

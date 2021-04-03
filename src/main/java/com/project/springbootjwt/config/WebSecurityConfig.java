@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests().antMatchers( API_USER+"register",
                                                                 API_USER+"auth/login").permitAll()
-                .antMatchers( "/api/v1/sellers/products").hasRole("SELLER")
+
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

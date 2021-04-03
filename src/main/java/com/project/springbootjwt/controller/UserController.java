@@ -1,18 +1,17 @@
 package com.project.springbootjwt.controller;
 
 import com.project.springbootjwt.exception.PasswordException;
-import com.project.springbootjwt.jwtUtils.JwtResponse;
 import com.project.springbootjwt.model.ChangePassword;
 import com.project.springbootjwt.model.User;
+import com.project.springbootjwt.model.UserInformation;
 import com.project.springbootjwt.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
 
-import javax.swing.text.html.parser.Entity;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/v1/users")
@@ -42,6 +41,14 @@ public class UserController {
         }else {
             userService.changePassword(changePassword.getId(), changePassword.getPassword());
         }
+    }
 
+    @RequestMapping(value = "/find/all", method = RequestMethod.GET)
+    public List<UserInformation> findAllUsers(){
+        return userService.findAllUser();
+    }
+    @RequestMapping(value = "/find/me/account", method = RequestMethod.GET)
+    public UserInformation findUser(){
+        return userService.findUser();
     }
 }
