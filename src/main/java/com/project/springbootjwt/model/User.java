@@ -1,10 +1,15 @@
 package com.project.springbootjwt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,6 +21,15 @@ public class User implements Serializable {
     private String name;
     private String username;
     private String password;
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(name = "created")
+    private Date created;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    @Column(name = "updated")
+    private Date updated;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_and_role",
@@ -65,6 +79,22 @@ public class User implements Serializable {
         this.roles = roles;
     }
 
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -72,6 +102,8 @@ public class User implements Serializable {
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", created=" + created +
+                ", updated=" + updated +
                 ", roles=" + roles +
                 '}';
     }
